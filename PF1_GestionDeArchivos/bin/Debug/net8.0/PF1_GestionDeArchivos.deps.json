@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "PF1_GestionDeArchivos/1.0.0": {
+        "runtime": {
+          "PF1_GestionDeArchivos.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "PF1_GestionDeArchivos/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
