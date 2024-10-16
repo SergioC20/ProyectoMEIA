@@ -50,10 +50,10 @@ namespace GestionDeArchivos
             if (userInfo != null)
             {
                 string role = userInfo[4].Trim() == "1" ? "Administrador" : "Usuario";
-                userInfoBlock.Text = $"Usuario: {userInfo[0].Trim()}\n" +
-                                     $"Nombre: {userInfo[1].Trim()}\n" +
-                                     $"Apellido: {userInfo[2].Trim()}\n" +
-                                     $"Rol: {role}\n" +
+                userInfoBlock.Text = $"Usuario: {userInfo[0].Trim()}; " +
+                                     $"Nombre: {userInfo[1].Trim()}; " +
+                                     $"Apellido: {userInfo[2].Trim()}; " +
+                                     $"Rol: {role}; " +
                                      $"Teléfono: {userInfo[6].Trim()}";
             }
         }
