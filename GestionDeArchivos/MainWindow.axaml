@@ -4,39 +4,39 @@
         Title="Login Application" Height="450" Width="400">
     <Grid>
         <StackPanel x:Name="LoginPanel" Margin="20">
-            <TextBlock Text="Username:" />
+            <TextBlock Text="Usuario:" />
             <TextBox Name="LoginUsernameBox" Margin="0,0,0,10" />
 
-            <TextBlock Text="Password:" />
+            <TextBlock Text="Contraseña:" />
             <TextBox Name="LoginPasswordBox" PasswordChar="" Margin="0,0,0,10" />
 
             <Button Name="LoginButton" Content="Login" Margin="0,0,0,10" />
-            <Button Name="ShowRegisterButton" Content="Register New User" Margin="0,0,0,10" />
+            <Button Name="ShowRegisterButton" Content="Registrar Nuevo Usuario" Margin="0,0,0,10" />
 
             <TextBlock Name="LoginMessageBlock" Foreground="Red" />
         </StackPanel>
 
         <StackPanel x:Name="RegisterPanel" Margin="20" IsVisible="False">
-            <TextBlock Text="Username:" />
+            <TextBlock Text="Usuario:" />
             <TextBox Name="RegisterUsernameBox" Margin="0,0,0,10" />
 
-            <TextBlock Text="Password:" />
+            <TextBlock Text="Contraseña:" />
             <TextBox Name="RegisterPasswordBox" PasswordChar="" Margin="0,0,0,10" />
 
-            <TextBlock Text="Name:" />
+            <TextBlock Text="Nombre:" />
             <TextBox Name="NameBox" Margin="0,0,0,10" />
 
-            <TextBlock Text="Surname:" />
+            <TextBlock Text="Apellido:" />
             <TextBox Name="SurnameBox" Margin="0,0,0,10" />
 
-            <TextBlock Text="Birth Date:" />
+            <TextBlock Text="Fecha De Nacimiento:" />
             <DatePicker Name="BirthDatePicker" Margin="0,0,0,10" />
 
-            <TextBlock Text="Phone:" />
+            <TextBlock Text="Telefono:" />
             <TextBox Name="PhoneBox" Margin="0,0,0,10" />
 
-            <Button Name="RegisterButton" Content="Register" Margin="0,0,0,10" />
-            <Button Name="BackToLoginButton" Content="Back to Login" Margin="0,0,0,10" />
+            <Button Name="RegisterButton" Content="Registrarse" Margin="0,0,0,10" />
+            <Button Name="BackToLoginButton" Content="Regresar al inicio" Margin="0,0,0,10" />
 
             <TextBlock Name="RegisterMessageBlock" Foreground="Red" />
         </StackPanel>

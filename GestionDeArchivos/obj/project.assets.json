@@ -1472,19 +1472,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\chejo\\.nuget\\packages\\": {}
+    "/Users/alejandrogil/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\UsuarioD\\Escritorio\\SergioU\\2semestre2024\\ManejoDeArchivos\\ProyectoFase1\\GestionDeArchivos\\GestionDeArchivos.csproj",
+      "projectUniqueName": "/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/GestionDeArchivos.csproj",
       "projectName": "GestionDeArchivos",
-      "projectPath": "D:\\UsuarioD\\Escritorio\\SergioU\\2semestre2024\\ManejoDeArchivos\\ProyectoFase1\\GestionDeArchivos\\GestionDeArchivos.csproj",
-      "packagesPath": "C:\\Users\\chejo\\.nuget\\packages\\",
-      "outputPath": "D:\\UsuarioD\\Escritorio\\SergioU\\2semestre2024\\ManejoDeArchivos\\ProyectoFase1\\GestionDeArchivos\\obj\\",
+      "projectPath": "/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/GestionDeArchivos.csproj",
+      "packagesPath": "/Users/alejandrogil/.nuget/packages/",
+      "outputPath": "/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\chejo\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/alejandrogil/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -1550,7 +1550,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.203/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.402/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
