@@ -1,4 +1,3 @@
-ApothiGoat          ;Alejandro                     ;Gil                           ;7FA18B94599DB540015E01EE857626AE;1;04/11/2001;30138101;1
-pepe123             ;Pepe                          ;Garcia                        ;D844588C423603A5D9C744C2B786E0FB;0;16/09/2024;30139;1
-Equisde             ;Equisde                       ;jaja                          ;9637880900AE8E7B5284B91DC6E89F05;0;16/11/2019;4543;1
-Chejoxz             ;Sergio                        ;Cardona                       ;872C60FFD4470502BF7C7F03754BFFB0;0;19/07/2000;1234;1
+Admin               ;Alejadnro                     ;Gil                           ;E714F5E09B26F37BB36F63F24789A3B5;1;16/07/1998;3013;1
+Usuario             ;Sergio                        ;Cardona                       ;8F3432D5ECECD31C3818B0D52EECDC14;0;16/08/2025;1201;0
+Usuario2            ;Pedro                         ;Casas                         ;8F3432D5ECECD31C3818B0D52EECDC14;0;16/10/2015;2030;1
