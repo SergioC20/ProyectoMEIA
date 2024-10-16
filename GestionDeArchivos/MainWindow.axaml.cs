@@ -80,7 +80,7 @@ namespace GestionDeArchivos
             {
                 if (loginMessageBlock != null) 
                 {
-                    loginMessageBlock.Text = "Usuario no encontrado, si desea agregarlo presione el boton";
+                    loginMessageBlock.Text = "Usuario no encontrado, si desea agregarlo presione el\nboton";
                     if (showRegisterButton != null) showRegisterButton.IsVisible = true;
                 }
                 return;
@@ -113,46 +113,72 @@ namespace GestionDeArchivos
 
         private void RegisterButton_Click(object? sender, RoutedEventArgs e)
         {
-            string username = registerUsernameBox?.Text ?? string.Empty;
-            string password = registerPasswordBox?.Text ?? string.Empty;
-            string name = nameBox?.Text ?? string.Empty;
-            string surname = surnameBox?.Text ?? string.Empty;
-            DateTime birthDate = birthDatePicker?.SelectedDate?.DateTime ?? DateTime.Now;
-            string phone = phoneBox?.Text ?? string.Empty;
+            if (registerMessageBlock == null) return;
 
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) ||
-                string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(surname) ||
-                string.IsNullOrWhiteSpace(phone))
+            try
             {
-                if (registerMessageBlock != null) registerMessageBlock.Text = "Please fill all fields.";
-                return;
-            }
+                string username = registerUsernameBox?.Text ?? string.Empty;
+                string password = registerPasswordBox?.Text ?? string.Empty;
+                string name = nameBox?.Text ?? string.Empty;
+                string surname = surnameBox?.Text ?? string.Empty;
+                DateTime birthDate = birthDatePicker?.SelectedDate?.DateTime ?? DateTime.Now;
+                string phone = phoneBox?.Text ?? string.Empty;
 
-            if (!IsValidName(name) || !IsValidName(surname))
-            {
-                if (registerMessageBlock != null) registerMessageBlock.Text = "Name and surname should only contain letters and spaces.";
-                return;
-            }
+                StringBuilder errorMessage = new StringBuilder();
 
-            if (!IsValidPhoneNumber(phone))
-            {
-                if (registerMessageBlock != null) registerMessageBlock.Text = "Invalid phone number.";
-                return;
-            }
+                if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) ||
+                    string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(surname) ||
+                    string.IsNullOrWhiteSpace(phone))
+                {
+                    errorMessage.AppendLine("Por favor, complete todos los campos.");
+                }
 
-            if (!IsStrongPassword(password))
-            {
-                return;
-            }
+                if (!IsValidName(name) || !IsValidName(surname))
+                {
+                    errorMessage.AppendLine("El nombre y apellido solo deben contener letras y espacios.");
+                }
 
-            if (AddNewUser(username, name, surname, password, birthDate, int.Parse(phone)))
-            {
-                if (registerMessageBlock != null) registerMessageBlock.Text = "User registered successfully!";
+                if (!IsValidPhoneNumber(phone))
+                {
+                    errorMessage.AppendLine("Número de teléfono inválido.");
+                }
+
+                string passwordErrorMessage = IsStrongPassword(password);
+                if (!string.IsNullOrEmpty(passwordErrorMessage))
+                {
+                    errorMessage.Append(passwordErrorMessage);
+                }
+
+                if (errorMessage.Length > 0)
+                {
+                    registerMessageBlock.Text = errorMessage.ToString();
+                    return;
+                }
+
+                if (AddNewUser(username, name, surname, password, birthDate, int.Parse(phone)))
+                {
+                    registerMessageBlock.Text = "Usuario registrado exitosamente!";
+                    ClearRegistrationFields();
+                }
+                else
+                {
+                    registerMessageBlock.Text = "Error al registrar usuario. El nombre de usuario podría ya existir.";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                if (registerMessageBlock != null) registerMessageBlock.Text = "Error registering user. Username might already exist.";
+                registerMessageBlock.Text = $"Error inesperado: {ex.Message}";
             }
+        }
+
+        private void ClearRegistrationFields()
+        {
+            if (registerUsernameBox != null) registerUsernameBox.Text = string.Empty;
+            if (registerPasswordBox != null) registerPasswordBox.Text = string.Empty;
+            if (nameBox != null) nameBox.Text = string.Empty;
+            if (surnameBox != null) surnameBox.Text = string.Empty;
+            if (birthDatePicker != null) birthDatePicker.SelectedDate = null;
+            if (phoneBox != null) phoneBox.Text = string.Empty;
         }
 
         private bool AuthenticateUser(string username, string password)
@@ -231,39 +257,32 @@ namespace GestionDeArchivos
             return Regex.IsMatch(input, @"^\d+$");
         }
 
-        private bool IsStrongPassword(string password)
+        private string IsStrongPassword(string password)
         {
-            bool isStrong = true;
             StringBuilder errorMessage = new StringBuilder();
 
             if (password.Length < 8)
             {
-                errorMessage.AppendLine("Password should be at least 8 characters long.");
-                isStrong = false;
+                errorMessage.AppendLine("La contraseña debe tener al menos 8 caracteres.");
             }
             if (!Regex.IsMatch(password, @"[A-Z]"))
             {
-                errorMessage.AppendLine("Password should contain at least one uppercase letter.");
-                isStrong = false;
+                errorMessage.AppendLine("La contraseña debe contener al menos una letra mayúscula.");
             }
             if (!Regex.IsMatch(password, @"[a-z]"))
             {
-                errorMessage.AppendLine("Password should contain at least one lowercase letter.");
-                isStrong = false;
+                errorMessage.AppendLine("La contraseña debe contener al menos una letra minúscula.");
             }
             if (!Regex.IsMatch(password, @"[0-9]"))
             {
-                errorMessage.AppendLine("Password should contain at least one digit.");
-                isStrong = false;
+                errorMessage.AppendLine("La contraseña debe contener al menos un número.");
             }
             if (!Regex.IsMatch(password, @"[!@#$%^&*(),.?:{}|<>]"))
             {
-                errorMessage.AppendLine("Password should contain at least one special character.");
-                isStrong = false;
+                errorMessage.AppendLine("La contraseña debe contener al menos un carácter especial.");
             }
 
-            if (registerMessageBlock != null) registerMessageBlock.Text = errorMessage.ToString();
-            return isStrong;
+            return errorMessage.ToString();
         }
     }
 }
