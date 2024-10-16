@@ -24,6 +24,7 @@ namespace GestionDeArchivos
         private TextBlock? registerMessageBlock;
         private StackPanel? loginPanel;
         private StackPanel? registerPanel;
+        private Button? showRegisterButton;
 
         private const string UsersFilePath = "users.txt";
         private const int RecordSize = 135;
@@ -55,7 +56,7 @@ namespace GestionDeArchivos
 
             var loginButton = this.FindControl<Button>("LoginButton");
             var registerButton = this.FindControl<Button>("RegisterButton");
-            var showRegisterButton = this.FindControl<Button>("ShowRegisterButton");
+            showRegisterButton = this.FindControl<Button>("ShowRegisterButton");
             var backToLoginButton = this.FindControl<Button>("BackToLoginButton");
 
             if (loginButton != null) loginButton.Click += LoginButton_Click;
@@ -69,13 +70,29 @@ namespace GestionDeArchivos
             string username = loginUsernameBox?.Text ?? string.Empty;
             string password = loginPasswordBox?.Text ?? string.Empty;
 
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                if (loginMessageBlock != null) loginMessageBlock.Text = "Please enter both username and password.";
+                return;
+            }
+
+            if (!IsUserExists(username))
+            {
+                if (loginMessageBlock != null) 
+                {
+                    loginMessageBlock.Text = "Usuario no encontrado, si desea agregarlo presione el boton";
+                    if (showRegisterButton != null) showRegisterButton.IsVisible = true;
+                }
+                return;
+            }
+
             if (AuthenticateUser(username, password))
             {
                 if (loginMessageBlock != null) loginMessageBlock.Text = "Login successful!";
             }
             else
             {
-                if (loginMessageBlock != null) loginMessageBlock.Text = "Username or password wrong";
+                if (loginMessageBlock != null) loginMessageBlock.Text = "Incorrect password.";
             }
         }
 
@@ -83,12 +100,15 @@ namespace GestionDeArchivos
         {
             if (loginPanel != null) loginPanel.IsVisible = false;
             if (registerPanel != null) registerPanel.IsVisible = true;
+            if (showRegisterButton != null) showRegisterButton.IsVisible = false;
         }
 
         private void BackToLoginButton_Click(object? sender, RoutedEventArgs e)
         {
             if (loginPanel != null) loginPanel.IsVisible = true;
             if (registerPanel != null) registerPanel.IsVisible = false;
+            if (showRegisterButton != null) showRegisterButton.IsVisible = false;
+            if (loginMessageBlock != null) loginMessageBlock.Text = string.Empty;
         }
 
         private void RegisterButton_Click(object? sender, RoutedEventArgs e)
@@ -151,18 +171,18 @@ namespace GestionDeArchivos
             return false;
         }
 
-        private bool AddNewUser(string user, string nombre, string apellido, string password, DateTime fecha_nacimiento, int telefono)
+        private bool AddNewUser(string user, string name, string surname, string password, DateTime birthDate, int phone)
         {
             if (IsUserExists(user)) return false;
 
             string hashedPassword = GetMD5Hash(password);
-            string fechaFormatted = fecha_nacimiento.ToString("dd/MM/yyyy");
+            string formattedDate = birthDate.ToString("dd/MM/yyyy");
 
             bool isFirstUser = !File.Exists(UsersFilePath) || new FileInfo(UsersFilePath).Length == 0;
-            int rol = isFirstUser ? 1 : 0;
-            int estatus = 1;
+            int role = isFirstUser ? 1 : 0;
+            int status = 1;
 
-            string newRecord = $"{user.PadRight(20)};{nombre.PadRight(30)};{apellido.PadRight(30)};{hashedPassword.PadRight(32)};{rol};{fechaFormatted};{telefono.ToString().PadRight(4)};{estatus}\n";
+            string newRecord = $"{user.PadRight(20)};{name.PadRight(30)};{surname.PadRight(30)};{hashedPassword.PadRight(32)};{role};{formattedDate};{phone.ToString().PadRight(4)};{status}\n";
 
             File.AppendAllText(UsersFilePath, newRecord);
             return true;
