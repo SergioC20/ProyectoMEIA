@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -144,77 +145,101 @@ namespace EjemploLogin
 
 
 
-        static void Backup(string path, string user)
+        static void RealizarRespaldo(string path_enhanced, string username)
         {
-            string backupDirectoryName = "MEIA_Backup";
-            string backupLogPath = @"C:\MEIA\bitacora_backup.txt";
-            string descLogPath = @"C:\MEIA\desc_bitacora_backup.txt";
-
             Console.WriteLine("Seleccione la ruta para el respaldo:");
-            string destinationPath = Console.ReadLine();
+            string rutaDestino = Console.ReadLine();
 
-            if (!Directory.Exists(destinationPath))
+            // Verificar si la ruta existe
+            if (Directory.Exists(rutaDestino))
             {
-                Console.WriteLine("La ruta ingresada no existe.");
-                return;
-            }
-
-            string backupFullPath = Path.Combine(destinationPath, backupDirectoryName);
-
-            try
-            {
-                // Crear directorio de respaldo
-                Directory.CreateDirectory(backupFullPath);
-
-                // Copiar todos los archivos de C:\MEIA al directorio de respaldo
-                string sourcePath = @"C:\MEIA";
-                foreach (string filePath in Directory.GetFiles(sourcePath))
+                // Crear el directorio MEIA_Backup dentro de la ruta destino
+                string rutaBackup = Path.Combine(rutaDestino, "MEIA_Backup");
+                if (!Directory.Exists(rutaBackup))
                 {
-                    string fileName = Path.GetFileName(filePath);
-                    string destFilePath = Path.Combine(backupFullPath, fileName);
-                    File.Copy(filePath, destFilePath, true);
+                    Directory.CreateDirectory(rutaBackup); // Crea la carpeta si no existe
                 }
 
-                // Registrar la operación en bitacora_backup.txt
-                LogBackup(backupFullPath, user, backupLogPath);
+                // Realizar la copia de los archivos
+                Console.WriteLine("Realizando respaldo...");
+                // Aquí puedes copiar los archivos del directorio C:\MEIA al respaldo
+                // Usamos DirectoryCopy para copiar los archivos (incluyendo subdirectorios)
+                DirectoryCopy(@"C:\MEIA", rutaBackup, true);
 
-                // Actualizar descriptor
-                UpdateDescriptorBackup(user, descLogPath);
+                // Guardar información en la bitácora
+                string bitacoraPath = @"C:\MEIA\bitacora_backup.txt";
+                using (StreamWriter sw = File.AppendText(bitacoraPath))
+                {
+                    sw.WriteLine($"{rutaBackup};{username};{DateTime.Now:dd/MM/yyyy}");
+                }
 
-                Console.WriteLine("Respaldo realizado con éxito.");
+                // Actualizar el descriptor de la bitácora
+                ActualizarDescriptorBitacora(username);
+
+                Console.WriteLine("Respaldo realizado con éxito en: " + rutaBackup);
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine("Error al realizar el respaldo: " + ex.Message);
+                Console.WriteLine("La ruta ingresada no existe.");
             }
         }
 
-        static void LogBackup(string backupFullPath, string user, string logPath)
+        // Función para copiar archivos y directorios
+        static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
-            string logEntry = $"{backupFullPath};{user};{DateTime.Now:dd/MM/yyyy}";
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+            DirectoryInfo[] dirs = dir.GetDirectories();
 
-            // Guardar la entrada en la bitácora
-            File.AppendAllText(logPath, logEntry + Environment.NewLine);
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException("Source directory does not exist or could not be found: " + sourceDirName);
+            }
+
+            Directory.CreateDirectory(destDirName);
+
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string tempPath = Path.Combine(destDirName, file.Name);
+                file.CopyTo(tempPath, false);
+            }
+
+            if (copySubDirs)
+            {
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    string tempPath = Path.Combine(destDirName, subdir.Name);
+                    DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
+                }
+            }
         }
 
-        static void UpdateDescriptorBackup(string user, string descLogPath)
+        // Función para actualizar el descriptor de la bitácora
+        static void ActualizarDescriptorBitacora(string username)
         {
-            string[] descLines = File.Exists(descLogPath) ? File.ReadAllLines(descLogPath) : null;
-            int numRegistros = descLines != null ? descLines.Length - 4 : 0; // Suponiendo que hay 4 líneas fijas en el descriptor
-
-            // Actualizar o crear descriptor
-            string descriptorContent = 
-            "nombre_simbolico: bitacora_backup.txt\n" +
-            $"fecha_creacion: {(descLines != null ? descLines[1].Split(':')[1].Trim() : DateTime.Now.ToString("dd/MM/yyyy"))}\n" +
-            $"usuario_creacion: {(descLines != null ? descLines[2].Split(':')[1].Trim() : user)}\n" +
-            $"fecha_modificacion: {DateTime.Now:dd/MM/yyyy}\n" +
-            $"usuario_modificacion: {user}\n" +
-            $"#_registros: {numRegistros + 1}\n";
-
-            // Guardar el descriptor actualizado
-            File.WriteAllText(descLogPath, descriptorContent);
+            string descriptorPath = @"C:\MEIA\desc_bitacora_backup.txt";
+            if (!File.Exists(descriptorPath))
+            {
+                using (StreamWriter sw = File.CreateText(descriptorPath))
+                {
+                    sw.WriteLine("nombre_simbolico: bitacora_backup");
+                    sw.WriteLine($"fecha_creacion: {DateTime.Now:dd/MM/yyyy}");
+                    sw.WriteLine($"usuario_creacion: {username}");
+                    sw.WriteLine($"fecha_modificacion: {DateTime.Now:dd/MM/yyyy}");
+                    sw.WriteLine($"usuario_modificacion: {username}");
+                    sw.WriteLine("#_registros: 1");
+                }
+            }
+            else
+            {
+                string[] lineas = File.ReadAllLines(descriptorPath);
+                int numRegistros = int.Parse(lineas[5].Split(':')[1].Trim()) + 1;
+                lineas[4] = $"fecha_modificacion: {DateTime.Now:dd/MM/yyyy}";
+                lineas[5] = $"usuario_modificacion: {username}";
+                lineas[6] = $"#_registros: {numRegistros}";
+                File.WriteAllLines(descriptorPath, lineas);
+            }
         }
-
 
         static void ModificarInformacionUsuario(string path_enhanced, string username)
         {
@@ -362,7 +387,7 @@ namespace EjemploLogin
                     {
                         fecha_nacimiento = DateTime.ParseExact(fechaNacimientoInput, "dd/MM/yyyy", null);
                         campos[5] = fecha_nacimiento.ToString("dd/MM/yyyy"); // Actualizar fecha
-                    }
+                    }   
 
                     // Validación y modificación del teléfono
                     string nuevoTelefono;
@@ -485,7 +510,7 @@ namespace EjemploLogin
                         AgregarUsuario(path_enhanced);  
                     break;
                      case "4":
-                        Backup(path_enhanced, username); 
+                        RealizarRespaldo(path_enhanced, username); 
                     break;
                     case "5":
                         Console.WriteLine("Saliendo del programa...");
