@@ -144,6 +144,78 @@ namespace EjemploLogin
 
 
 
+        static void Backup(string path, string user)
+        {
+            string backupDirectoryName = "MEIA_Backup";
+            string backupLogPath = @"C:\MEIA\bitacora_backup.txt";
+            string descLogPath = @"C:\MEIA\desc_bitacora_backup.txt";
+
+            Console.WriteLine("Seleccione la ruta para el respaldo:");
+            string destinationPath = Console.ReadLine();
+
+            if (!Directory.Exists(destinationPath))
+            {
+                Console.WriteLine("La ruta ingresada no existe.");
+                return;
+            }
+
+            string backupFullPath = Path.Combine(destinationPath, backupDirectoryName);
+
+            try
+            {
+                // Crear directorio de respaldo
+                Directory.CreateDirectory(backupFullPath);
+
+                // Copiar todos los archivos de C:\MEIA al directorio de respaldo
+                string sourcePath = @"C:\MEIA";
+                foreach (string filePath in Directory.GetFiles(sourcePath))
+                {
+                    string fileName = Path.GetFileName(filePath);
+                    string destFilePath = Path.Combine(backupFullPath, fileName);
+                    File.Copy(filePath, destFilePath, true);
+                }
+
+                // Registrar la operación en bitacora_backup.txt
+                LogBackup(backupFullPath, user, backupLogPath);
+
+                // Actualizar descriptor
+                UpdateDescriptorBackup(user, descLogPath);
+
+                Console.WriteLine("Respaldo realizado con éxito.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al realizar el respaldo: " + ex.Message);
+            }
+        }
+
+        static void LogBackup(string backupFullPath, string user, string logPath)
+        {
+            string logEntry = $"{backupFullPath};{user};{DateTime.Now:dd/MM/yyyy}";
+
+            // Guardar la entrada en la bitácora
+            File.AppendAllText(logPath, logEntry + Environment.NewLine);
+        }
+
+        static void UpdateDescriptorBackup(string user, string descLogPath)
+        {
+            string[] descLines = File.Exists(descLogPath) ? File.ReadAllLines(descLogPath) : null;
+            int numRegistros = descLines != null ? descLines.Length - 4 : 0; // Suponiendo que hay 4 líneas fijas en el descriptor
+
+            // Actualizar o crear descriptor
+            string descriptorContent = 
+            "nombre_simbolico: bitacora_backup.txt\n" +
+            $"fecha_creacion: {(descLines != null ? descLines[1].Split(':')[1].Trim() : DateTime.Now.ToString("dd/MM/yyyy"))}\n" +
+            $"usuario_creacion: {(descLines != null ? descLines[2].Split(':')[1].Trim() : user)}\n" +
+            $"fecha_modificacion: {DateTime.Now:dd/MM/yyyy}\n" +
+            $"usuario_modificacion: {user}\n" +
+            $"#_registros: {numRegistros + 1}\n";
+
+            // Guardar el descriptor actualizado
+            File.WriteAllText(descLogPath, descriptorContent);
+        }
+
+
         static void ModificarInformacionUsuario(string path_enhanced, string username)
         {
             // Leer todas las líneas del archivo
@@ -397,7 +469,8 @@ namespace EjemploLogin
                 Console.WriteLine("1. Modificar mi información");
                 Console.WriteLine("2. Buscar usuario");
                 Console.WriteLine("3. Añadir usuario");
-                Console.WriteLine("4. Salir del programa");
+                Console.WriteLine("4. Realizar Backup de información"); 
+                Console.WriteLine("5. Salir del programa");
 
                 string eleccion = Console.ReadLine();
                 switch (eleccion)
@@ -411,7 +484,10 @@ namespace EjemploLogin
                     case "3":
                         AgregarUsuario(path_enhanced);  
                     break;
-                    case "4":
+                     case "4":
+                        Backup(path_enhanced, username); 
+                    break;
+                    case "5":
                         Console.WriteLine("Saliendo del programa...");
                     return;
                     

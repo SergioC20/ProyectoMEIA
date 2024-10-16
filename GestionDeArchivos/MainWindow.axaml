@@ -1,0 +1,44 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GestionDeArchivos.MainWindow"
+        Title="Login Application" Height="450" Width="400">
+    <Grid>
+        <StackPanel x:Name="LoginPanel" Margin="20">
+            <TextBlock Text="Username:" />
+            <TextBox Name="LoginUsernameBox" Margin="0,0,0,10" />
+
+            <TextBlock Text="Password:" />
+            <TextBox Name="LoginPasswordBox" PasswordChar="" Margin="0,0,0,10" />
+
+            <Button Name="LoginButton" Content="Login" Margin="0,0,0,10" />
+            <Button Name="ShowRegisterButton" Content="Register New User" Margin="0,0,0,10" />
+
+            <TextBlock Name="LoginMessageBlock" Foreground="Red" />
+        </StackPanel>
+
+        <StackPanel x:Name="RegisterPanel" Margin="20" IsVisible="False">
+            <TextBlock Text="Username:" />
+            <TextBox Name="RegisterUsernameBox" Margin="0,0,0,10" />
+
+            <TextBlock Text="Password:" />
+            <TextBox Name="RegisterPasswordBox" PasswordChar="" Margin="0,0,0,10" />
+
+            <TextBlock Text="Name:" />
+            <TextBox Name="NameBox" Margin="0,0,0,10" />
+
+            <TextBlock Text="Surname:" />
+            <TextBox Name="SurnameBox" Margin="0,0,0,10" />
+
+            <TextBlock Text="Birth Date:" />
+            <DatePicker Name="BirthDatePicker" Margin="0,0,0,10" />
+
+            <TextBlock Text="Phone:" />
+            <TextBox Name="PhoneBox" Margin="0,0,0,10" />
+
+            <Button Name="RegisterButton" Content="Register" Margin="0,0,0,10" />
+            <Button Name="BackToLoginButton" Content="Back to Login" Margin="0,0,0,10" />
+
+            <TextBlock Name="RegisterMessageBlock" Foreground="Red" />
+        </StackPanel>
+    </Grid>
+</Window>
