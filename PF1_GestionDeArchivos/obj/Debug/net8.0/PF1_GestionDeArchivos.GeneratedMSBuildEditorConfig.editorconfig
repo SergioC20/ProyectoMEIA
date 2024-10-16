@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = PF1_GestionDeArchivos
-build_property.ProjectDir = D:\UsuarioD\Escritorio\SergioU\2semestre2024\ManejoDeArchivos\ProyectoFase1\PF1_GestionDeArchivos\
+build_property.ProjectDir = /Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/PF1_GestionDeArchivos/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

@@ -1,2 +1,4 @@
-ApothiGoat          ;Alejandro                     ;Gil                           ;7FA18B94599DB540015E01EE857626AE;1;03/10/2000;30138100;1
+ApothiGoat          ;Alejandro                     ;Gil                           ;7FA18B94599DB540015E01EE857626AE;1;04/11/2001;30138101;1
 pepe123             ;Pepe                          ;Garcia                        ;D844588C423603A5D9C744C2B786E0FB;0;16/09/2024;30139;1
+Equisde             ;Equisde                       ;jaja                          ;9637880900AE8E7B5284B91DC6E89F05;0;16/11/2019;4543;1
+Chejoxz             ;Sergio                        ;Cardona                       ;872C60FFD4470502BF7C7F03754BFFB0;0;19/07/2000;1234;1

@@ -65,37 +65,67 @@ namespace GestionDeArchivos
             if (backToLoginButton != null) backToLoginButton.Click += BackToLoginButton_Click;
         }
 
-        private void LoginButton_Click(object? sender, RoutedEventArgs e)
+    private void LoginButton_Click(object? sender, RoutedEventArgs e)
+    {
+        string username = loginUsernameBox?.Text ?? string.Empty;
+        string password = loginPasswordBox?.Text ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
-            string username = loginUsernameBox?.Text ?? string.Empty;
-            string password = loginPasswordBox?.Text ?? string.Empty;
+            if (loginMessageBlock != null) loginMessageBlock.Text = "Por favor, ingrese nombre de usuario y contraseña.";
+            return;
+        }
 
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        if (!IsUserExists(username))
+        {
+            if (loginMessageBlock != null) 
             {
-                if (loginMessageBlock != null) loginMessageBlock.Text = "Please enter both username and password.";
-                return;
+                loginMessageBlock.Text = "Usuario no encontrado, si desea agregarlo presione el botón";
+                if (showRegisterButton != null) showRegisterButton.IsVisible = true;
             }
+            return;
+        }
 
-            if (!IsUserExists(username))
+        if (AuthenticateUser(username, password))
+        {
+            if (loginMessageBlock != null) loginMessageBlock.Text = "Inicio de sesión exitoso!";
+        
+            // Verificar si el usuario es administrador
+            bool isAdmin = IsUserAdmin(username);
+        
+            if (isAdmin)
             {
-                if (loginMessageBlock != null) 
-                {
-                    loginMessageBlock.Text = "Usuario no encontrado, si desea agregarlo presione el\nboton";
-                    if (showRegisterButton != null) showRegisterButton.IsVisible = true;
-                }
-                return;
-            }
-
-            if (AuthenticateUser(username, password))
-            {
-                if (loginMessageBlock != null) loginMessageBlock.Text = "Login successful!";
+                var adminMenuWindow = new AdminMenuWindow(username);
+                adminMenuWindow.Show();
             }
             else
             {
-                if (loginMessageBlock != null) loginMessageBlock.Text = "Incorrect password.";
+                var userMenuWindow = new UserMenuWindow(username);
+                userMenuWindow.Show();
             }
+        
+            // Opcionalmente, puedes cerrar la ventana de inicio de sesión
+            // Close();
         }
+        else
+        {
+            if (loginMessageBlock != null) loginMessageBlock.Text = "Contraseña incorrecta.";
+        }
+    }
 
+private bool IsUserAdmin(string username)
+{
+    string[] lines = File.ReadAllLines(UsersFilePath);
+    foreach (var line in lines)
+    {
+        string[] fields = line.Split(';');
+        if (fields[0].Trim() == username)
+        {
+            return fields[4].Trim() == "1";
+        }
+    }
+    return false;
+}
         private void ShowRegisterButton_Click(object? sender, RoutedEventArgs e)
         {
             if (loginPanel != null) loginPanel.IsVisible = false;
