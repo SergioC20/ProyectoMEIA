@@ -145,7 +145,7 @@ namespace EjemploLogin
         static void Main(string[] args)
         {
             bool usuarioEncontrado = false;
-            string path_enhanced = "C:\\MEIA\\user.txt";
+            string path_enhanced = "/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/user.txt";
 
             if (File.Exists(path_enhanced))
             {
