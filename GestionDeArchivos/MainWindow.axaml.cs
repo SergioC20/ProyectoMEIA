@@ -10,140 +10,140 @@ using Avalonia.Interactivity;
 
 namespace GestionDeArchivos
 {
-    public partial class MainWindow : Window
+    public partial class VentanaPrincipal : Window
     {
-        private TextBox? loginUsernameBox;
-        private TextBox? loginPasswordBox;
-        private TextBox? registerUsernameBox;
-        private TextBox? registerPasswordBox;
-        private TextBox? nameBox;
-        private TextBox? surnameBox;
-        private DatePicker? birthDatePicker;
-        private TextBox? phoneBox;
-        private TextBlock? loginMessageBlock;
-        private TextBlock? registerMessageBlock;
-        private StackPanel? loginPanel;
-        private StackPanel? registerPanel;
+        private TextBox? cajaUsuarioInicio;
+        private TextBox? cajaContrasenaInicio;
+        private TextBox? cajaUsuarioRegistro;
+        private TextBox? cajaContrasenaRegistro;
+        private TextBox? cajaNombre;
+        private TextBox? cajaApellido;
+        private DatePicker? selectorFechaNacimiento;
+        private TextBox? cajaTelefono;
+        private TextBlock? bloqueErrorInicio;
+        private TextBlock? bloqueErrorRegistro;
+        private StackPanel? panelInicio;
+        private StackPanel? panelRegistro;
 
-        private const string UsersFilePath = "users.txt";
-        private const int RecordSize = 135;
+        private const string RutaArchivoUsuarios = "usuarios.txt";
+        private const int TamanoRegistro = 135;
 
-        public MainWindow()
+        public VentanaPrincipal()
         {
-            InitializeComponent();
+            inicializarComponentes();
 #if DEBUG
             this.AttachDevTools();
 #endif
         }
 
-        private void InitializeComponent()
+        private void inicializarComponentes()
         {
             AvaloniaXamlLoader.Load(this);
 
-            loginUsernameBox = this.FindControl<TextBox>("LoginUsernameBox");
-            loginPasswordBox = this.FindControl<TextBox>("LoginPasswordBox");
-            registerUsernameBox = this.FindControl<TextBox>("RegisterUsernameBox");
-            registerPasswordBox = this.FindControl<TextBox>("RegisterPasswordBox");
-            nameBox = this.FindControl<TextBox>("NameBox");
-            surnameBox = this.FindControl<TextBox>("SurnameBox");
-            birthDatePicker = this.FindControl<DatePicker>("BirthDatePicker");
-            phoneBox = this.FindControl<TextBox>("PhoneBox");
-            loginMessageBlock = this.FindControl<TextBlock>("LoginMessageBlock");
-            registerMessageBlock = this.FindControl<TextBlock>("RegisterMessageBlock");
-            loginPanel = this.FindControl<StackPanel>("LoginPanel");
-            registerPanel = this.FindControl<StackPanel>("RegisterPanel");
+            cajaUsuarioInicio = this.FindControl<TextBox>("CajaUsuarioInicio");
+            cajaContrasenaInicio = this.FindControl<TextBox>("CajaContrasenaInicio");
+            cajaUsuarioRegistro = this.FindControl<TextBox>("CajaUsuarioRegistro");
+            cajaContrasenaRegistro = this.FindControl<TextBox>("CajaContrasenaRegistro");
+            cajaNombre = this.FindControl<TextBox>("CajaNombre");
+            cajaApellido = this.FindControl<TextBox>("CajaApellido");
+            selectorFechaNacimiento = this.FindControl<DatePicker>("SelectorFechaNacimiento");
+            cajaTelefono = this.FindControl<TextBox>("CajaTelefono");
+            bloqueErrorInicio = this.FindControl<TextBlock>("BloqueErrorInicio");
+            bloqueErrorRegistro = this.FindControl<TextBlock>("BloqueErrorRegistro");
+            panelInicio = this.FindControl<StackPanel>("PanelInicio");
+            panelRegistro = this.FindControl<StackPanel>("PanelRegistro");
 
-            var loginButton = this.FindControl<Button>("LoginButton");
-            var registerButton = this.FindControl<Button>("RegisterButton");
-            var showRegisterButton = this.FindControl<Button>("ShowRegisterButton");
-            var backToLoginButton = this.FindControl<Button>("BackToLoginButton");
+            var botonInicio = this.FindControl<Button>("BotonInicio");
+            var botonRegistro = this.FindControl<Button>("BotonRegistro");
+            var botonMostrarRegistro = this.FindControl<Button>("BotonMostrarRegistro");
+            var botonVolverInicio = this.FindControl<Button>("BotonVolverInicio");
 
-            if (loginButton != null) loginButton.Click += LoginButton_Click;
-            if (registerButton != null) registerButton.Click += RegisterButton_Click;
-            if (showRegisterButton != null) showRegisterButton.Click += ShowRegisterButton_Click;
-            if (backToLoginButton != null) backToLoginButton.Click += BackToLoginButton_Click;
+            if (botonInicio != null) botonInicio.Click += clickBotonInicio;
+            if (botonRegistro != null) botonRegistro.Click += clickBotonRegistro;
+            if (botonMostrarRegistro != null) botonMostrarRegistro.Click += clickBotonMostrarRegistro;
+            if (botonVolverInicio != null) botonVolverInicio.Click += clickBotonVolverInicio;
         }
 
-        private void LoginButton_Click(object? sender, RoutedEventArgs e)
+        private void clickBotonInicio(object? sender, RoutedEventArgs e)
         {
-            string username = loginUsernameBox?.Text ?? string.Empty;
-            string password = loginPasswordBox?.Text ?? string.Empty;
+            string usuario = cajaUsuarioInicio?.Text ?? string.Empty;
+            string contrasena = cajaContrasenaInicio?.Text ?? string.Empty;
 
-            if (AuthenticateUser(username, password))
+            if (autenticarUsuario(usuario, contrasena))
             {
-                if (loginMessageBlock != null) loginMessageBlock.Text = "Login successful!";
+                if (bloqueErrorInicio != null) bloqueErrorInicio.Text = "¡Inicio de sesión exitoso!";
             }
             else
             {
-                if (loginMessageBlock != null) loginMessageBlock.Text = "Username or password wrong";
+                if (bloqueErrorInicio != null) bloqueErrorInicio.Text = "Usuario o contraseña incorrectos";
             }
         }
 
-        private void ShowRegisterButton_Click(object? sender, RoutedEventArgs e)
+        private void clickBotonMostrarRegistro(object? sender, RoutedEventArgs e)
         {
-            if (loginPanel != null) loginPanel.IsVisible = false;
-            if (registerPanel != null) registerPanel.IsVisible = true;
+            if (panelInicio != null) panelInicio.IsVisible = false;
+            if (panelRegistro != null) panelRegistro.IsVisible = true;
         }
 
-        private void BackToLoginButton_Click(object? sender, RoutedEventArgs e)
+        private void clickBotonVolverInicio(object? sender, RoutedEventArgs e)
         {
-            if (loginPanel != null) loginPanel.IsVisible = true;
-            if (registerPanel != null) registerPanel.IsVisible = false;
+            if (panelInicio != null) panelInicio.IsVisible = true;
+            if (panelRegistro != null) panelRegistro.IsVisible = false;
         }
 
-        private void RegisterButton_Click(object? sender, RoutedEventArgs e)
+        private void clickBotonRegistro(object? sender, RoutedEventArgs e)
         {
-            string username = registerUsernameBox?.Text ?? string.Empty;
-            string password = registerPasswordBox?.Text ?? string.Empty;
-            string name = nameBox?.Text ?? string.Empty;
-            string surname = surnameBox?.Text ?? string.Empty;
-            DateTime birthDate = birthDatePicker?.SelectedDate?.DateTime ?? DateTime.Now;
-            string phone = phoneBox?.Text ?? string.Empty;
+            string usuario = cajaUsuarioRegistro?.Text ?? string.Empty;
+            string contrasena = cajaContrasenaRegistro?.Text ?? string.Empty;
+            string nombre = cajaNombre?.Text ?? string.Empty;
+            string apellido = cajaApellido?.Text ?? string.Empty;
+            DateTime fechaNacimiento = selectorFechaNacimiento?.SelectedDate?.DateTime ?? DateTime.Now;
+            string telefono = cajaTelefono?.Text ?? string.Empty;
 
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) ||
-                string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(surname) ||
-                string.IsNullOrWhiteSpace(phone))
+            if (string.IsNullOrWhiteSpace(usuario) || string.IsNullOrWhiteSpace(contrasena) ||
+                string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(apellido) ||
+                string.IsNullOrWhiteSpace(telefono))
             {
-                if (registerMessageBlock != null) registerMessageBlock.Text = "Please fill all fields.";
+                if (bloqueErrorRegistro != null) bloqueErrorRegistro.Text = "Por favor, complete todos los campos.";
                 return;
             }
 
-            if (!IsValidName(name) || !IsValidName(surname))
+            if (!esNombreValido(nombre) || !esNombreValido(apellido))
             {
-                if (registerMessageBlock != null) registerMessageBlock.Text = "Name and surname should only contain letters and spaces.";
+                if (bloqueErrorRegistro != null) bloqueErrorRegistro.Text = "El nombre y apellido solo deben contener letras y espacios.";
                 return;
             }
 
-            if (!IsValidPhoneNumber(phone))
+            if (!esNumeroTelefonoValido(telefono))
             {
-                if (registerMessageBlock != null) registerMessageBlock.Text = "Invalid phone number.";
+                if (bloqueErrorRegistro != null) bloqueErrorRegistro.Text = "Número de teléfono inválido.";
                 return;
             }
 
-            if (!IsStrongPassword(password))
+            if (!esContrasenaFuerte(contrasena))
             {
                 return;
             }
 
-            if (AddNewUser(username, name, surname, password, birthDate, int.Parse(phone)))
+            if (agregarNuevoUsuario(usuario, nombre, apellido, contrasena, fechaNacimiento, int.Parse(telefono)))
             {
-                if (registerMessageBlock != null) registerMessageBlock.Text = "User registered successfully!";
+                if (bloqueErrorRegistro != null) bloqueErrorRegistro.Text = "Usuario registrado exitosamente.";
             }
             else
             {
-                if (registerMessageBlock != null) registerMessageBlock.Text = "Error registering user. Username might already exist.";
+                if (bloqueErrorRegistro != null) bloqueErrorRegistro.Text = "Error al registrar usuario. El nombre de usuario podría ya existir.";
             }
         }
 
-        private bool AuthenticateUser(string username, string password)
+        private bool autenticarUsuario(string usuario, string contrasena)
         {
-            if (!File.Exists(UsersFilePath)) return false;
+            if (!File.Exists(RutaArchivoUsuarios)) return false;
 
-            string[] lines = File.ReadAllLines(UsersFilePath);
-            foreach (var line in lines)
+            string[] lineas = File.ReadAllLines(RutaArchivoUsuarios);
+            foreach (var linea in lineas)
             {
-                string[] fields = line.Split(';');
-                if (fields[0].Trim() == username && fields[3].Trim() == GetMD5Hash(password))
+                string[] campos = linea.Split(';');
+                if (campos[0].Trim() == usuario && campos[3].Trim() == obtenerHashMD5(contrasena))
                 {
                     return true;
                 }
@@ -151,32 +151,32 @@ namespace GestionDeArchivos
             return false;
         }
 
-        private bool AddNewUser(string user, string nombre, string apellido, string password, DateTime fecha_nacimiento, int telefono)
+        private bool agregarNuevoUsuario(string usuario, string nombre, string apellido, string contrasena, DateTime fechaNacimiento, int telefono)
         {
-            if (IsUserExists(user)) return false;
+            if (existeUsuario(usuario)) return false;
 
-            string hashedPassword = GetMD5Hash(password);
-            string fechaFormatted = fecha_nacimiento.ToString("dd/MM/yyyy");
+            string contrasenaEncriptada = obtenerHashMD5(contrasena);
+            string fechaFormateada = fechaNacimiento.ToString("dd/MM/yyyy");
 
-            bool isFirstUser = !File.Exists(UsersFilePath) || new FileInfo(UsersFilePath).Length == 0;
-            int rol = isFirstUser ? 1 : 0;
+            bool esPrimerUsuario = !File.Exists(RutaArchivoUsuarios) || new FileInfo(RutaArchivoUsuarios).Length == 0;
+            int rol = esPrimerUsuario ? 1 : 0;
             int estatus = 1;
 
-            string newRecord = $"{user.PadRight(20)};{nombre.PadRight(30)};{apellido.PadRight(30)};{hashedPassword.PadRight(32)};{rol};{fechaFormatted};{telefono.ToString().PadRight(4)};{estatus}\n";
+            string nuevoRegistro = $"{usuario.PadRight(20)};{nombre.PadRight(30)};{apellido.PadRight(30)};{contrasenaEncriptada.PadRight(32)};{rol};{fechaFormateada};{telefono.ToString().PadRight(4)};{estatus}\n";
 
-            File.AppendAllText(UsersFilePath, newRecord);
+            File.AppendAllText(RutaArchivoUsuarios, nuevoRegistro);
             return true;
         }
 
-        private bool IsUserExists(string username)
+        private bool existeUsuario(string usuario)
         {
-            if (!File.Exists(UsersFilePath)) return false;
+            if (!File.Exists(RutaArchivoUsuarios)) return false;
 
-            string[] lines = File.ReadAllLines(UsersFilePath);
-            foreach (var line in lines)
+            string[] lineas = File.ReadAllLines(RutaArchivoUsuarios);
+            foreach (var linea in lineas)
             {
-                string[] fields = line.Split(';');
-                if (fields[0].Trim().Equals(username, StringComparison.OrdinalIgnoreCase))
+                string[] campos = linea.Split(';');
+                if (campos[0].Trim().Equals(usuario, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
@@ -184,66 +184,66 @@ namespace GestionDeArchivos
             return false;
         }
 
-        private string GetMD5Hash(string input)
+        private string obtenerHashMD5(string entrada)
         {
             using (MD5 md5 = MD5.Create())
             {
-                byte[] inputBytes = Encoding.ASCII.GetBytes(input);
-                byte[] hashBytes = md5.ComputeHash(inputBytes);
+                byte[] datosEntrada = Encoding.ASCII.GetBytes(entrada);
+                byte[] datosHash = md5.ComputeHash(datosEntrada);
 
                 StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < hashBytes.Length; i++)
+                for (int i = 0; i < datosHash.Length; i++)
                 {
-                    sb.Append(hashBytes[i].ToString("X2"));
+                    sb.Append(datosHash[i].ToString("X2"));
                 }
 
                 return sb.ToString();
             }
         }
 
-        private bool IsValidName(string input)
+        private bool esNombreValido(string entrada)
         {
-            return Regex.IsMatch(input, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$");
+            return Regex.IsMatch(entrada, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$");
         }
 
-        private bool IsValidPhoneNumber(string input)
+        private bool esNumeroTelefonoValido(string entrada)
         {
-            return Regex.IsMatch(input, @"^\d+$");
+            return Regex.IsMatch(entrada, @"^\d+$");
         }
 
-        private bool IsStrongPassword(string password)
+        private bool esContrasenaFuerte(string contrasena)
         {
-            bool isStrong = true;
-            StringBuilder errorMessage = new StringBuilder();
+            bool esFuerte = true;
+            StringBuilder mensajeError = new StringBuilder();
 
-            if (password.Length < 8)
+            if (contrasena.Length < 8)
             {
-                errorMessage.AppendLine("Password should be at least 8 characters long.");
-                isStrong = false;
+                mensajeError.AppendLine("La contraseña debe tener al menos 8 caracteres.");
+                esFuerte = false;
             }
-            if (!Regex.IsMatch(password, @"[A-Z]"))
+            if (!Regex.IsMatch(contrasena, @"[A-Z]"))
             {
-                errorMessage.AppendLine("Password should contain at least one uppercase letter.");
-                isStrong = false;
+                mensajeError.AppendLine("La contraseña debe contener al menos una letra mayúscula.");
+                esFuerte = false;
             }
-            if (!Regex.IsMatch(password, @"[a-z]"))
+            if (!Regex.IsMatch(contrasena, @"[a-z]"))
             {
-                errorMessage.AppendLine("Password should contain at least one lowercase letter.");
-                isStrong = false;
+                mensajeError.AppendLine("La contraseña debe contener al menos una letra minúscula.");
+                esFuerte = false;
             }
-            if (!Regex.IsMatch(password, @"[0-9]"))
+            if (!Regex.IsMatch(contrasena, @"[0-9]"))
             {
-                errorMessage.AppendLine("Password should contain at least one digit.");
-                isStrong = false;
+                mensajeError.AppendLine("La contraseña debe contener al menos un dígito.");
+                esFuerte = false;
             }
-            if (!Regex.IsMatch(password, @"[!@#$%^&*(),.?:{}|<>]"))
+            if (!Regex.IsMatch(contrasena, @"[!@#$%^&*(),.?:{}|<>]"))
             {
-                errorMessage.AppendLine("Password should contain at least one special character.");
-                isStrong = false;
+                mensajeError.AppendLine("La contraseña debe contener al menos un carácter especial.");
+                esFuerte = false;
             }
 
-            if (registerMessageBlock != null) registerMessageBlock.Text = errorMessage.ToString();
-            return isStrong;
+            if (bloqueErrorRegistro != null) bloqueErrorRegistro.Text = mensajeError.ToString();
+            return esFuerte;
         }
     }
 }
