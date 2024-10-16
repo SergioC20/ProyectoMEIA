@@ -1,0 +1,32 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GestionDeArchivos.RegisterUserWindow"
+        Title="Registrar Nuevo Usuario"
+        Width="300" Height="500">
+    <StackPanel Margin="20">
+        <TextBlock Text="Registrar Nuevo Usuario" FontWeight="Bold" FontSize="20" Margin="0,0,0,20"/>
+        
+        <TextBlock Text="Nombre de Usuario:"/>
+        <TextBox x:Name="UsernameBox" Margin="0,0,0,10"/>
+        
+        <TextBlock Text="Contraseña:"/>
+        <TextBox x:Name="PasswordBox" PasswordChar="*" Margin="0,0,0,10"/>
+        
+        <TextBlock Text="Nombre:"/>
+        <TextBox x:Name="NameBox" Margin="0,0,0,10"/>
+        
+        <TextBlock Text="Apellido:"/>
+        <TextBox x:Name="SurnameBox" Margin="0,0,0,10"/>
+        
+        <TextBlock Text="Fecha de Nacimiento:"/>
+        <DatePicker x:Name="BirthDatePicker" Margin="0,0,0,10"/>
+        
+        <TextBlock Text="Teléfono:"/>
+        <TextBox x:Name="PhoneBox" Margin="0,0,0,20"/>
+        
+        <Button x:Name="RegisterButton" Content="Registrar Usuario" Margin="0,0,0,10"/>
+        <Button x:Name="CancelButton" Content="Cancelar"/>
+        
+        <TextBlock x:Name="MessageBlock" Margin="0,20,0,0" TextWrapping="Wrap"/>
+    </StackPanel>
+</Window>

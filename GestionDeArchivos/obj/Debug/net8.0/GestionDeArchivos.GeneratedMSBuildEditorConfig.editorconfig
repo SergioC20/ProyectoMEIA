@@ -19,8 +19,29 @@ build_property.ProjectDir = /Users/alejandrogil/Desktop/Uni/Lenguajes formales /
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 
+[/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/AdminMenuWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/BackupWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/EditAdminWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/EditUserWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/MainWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/RegisterUserWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/SearchUserWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/UserMenuWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
