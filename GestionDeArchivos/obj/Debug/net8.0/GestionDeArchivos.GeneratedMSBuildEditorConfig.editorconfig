@@ -19,6 +19,9 @@ build_property.ProjectDir = /Users/alejandrogil/Desktop/Uni/Lenguajes formales /
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 
+[/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/AddContactWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/AdminMenuWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
@@ -28,7 +31,13 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/BackupWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/BroadcastListWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/EditAdminWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/EditNameWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/EditUserWindow.axaml]
@@ -41,6 +50,9 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/SearchUserWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/SelectContactsWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [/Users/alejandrogil/Desktop/Uni/Lenguajes formales /Programs/ProyectoMEIA/GestionDeArchivos/UserMenuWindow.axaml]

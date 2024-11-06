@@ -7,6 +7,7 @@
         <TextBlock x:Name="UserInfoBlock" Margin="0,0,0,20" TextWrapping="Wrap"/>
         <TextBlock Text="Menú de Usuario" FontWeight="Bold" FontSize="20" Margin="0,0,0,20"/>
         <Button x:Name="ModifyInfoButton" Content="Modificar mi información" Margin="0,0,0,10"/>
+        <Button x:Name="AddContactButton" Content="Agregar Contacto" Margin="0,0,0,10"/>
         <Button x:Name="ExitButton" Content="Salir del programa"/>
     </StackPanel>
 </Window>

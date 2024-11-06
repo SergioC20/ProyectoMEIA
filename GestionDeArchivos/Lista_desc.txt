@@ -1,0 +1,6 @@
+nombre_simbolico=Lista
+fecha_creacion=2024-11-06 12:34:37
+usuario_creacion=Admin1
+numero_registros=3
+registros_activos=3
+registros_inactivos=0
