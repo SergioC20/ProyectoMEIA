@@ -1,0 +1,46 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GestionDeArchivos.AddContactWindow"
+        Title="Gestión de Contactos"
+        Width="600" Height="700">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Sección de búsqueda de usuarios -->
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Buscar Usuario" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBox x:Name="SearchBox" Watermark="Ingrese nombre de usuario o nombre" Margin="0,0,0,10"/>
+            <Button x:Name="SearchButton" Content="Buscar Usuario" Margin="0,0,0,10"/>
+            <TextBlock x:Name="ResultBlock" Margin="0,0,0,20" TextWrapping="Wrap"/>
+            <Button x:Name="AddButton" Content="Agregar como Contacto" Margin="0,0,0,20"/>
+        </StackPanel>
+
+        <!-- Separador -->
+        <Rectangle Grid.Row="1" Height="2" Fill="Gray" Margin="0,0,0,20"/>
+
+        <!-- Sección de gestión de contactos -->
+        <StackPanel Grid.Row="2">
+            <TextBlock Text="Gestión de Contactos" FontWeight="Bold" Margin="0,0,0,10"/>
+            
+            <!-- Nuevo TextBox para buscar contactos -->
+            <TextBox x:Name="ContactSearchBox" Watermark="Ingrese nombre del contacto a buscar" Margin="0,0,0,10"/>
+            
+            <WrapPanel>
+                <Button x:Name="SearchContactButton" Content="Buscar Contacto" Margin="0,0,10,10"/>
+                <Button x:Name="ModifyContactButton" Content="Modificar Contacto" Margin="0,0,10,10"/>
+                <Button x:Name="DeleteContactButton" Content="Eliminar Contacto" Margin="0,0,0,10"/>
+                <Button x:Name="BroadcastListButton" Content="Listas de Difusión" Margin="0,0,10,10"/>
+            </WrapPanel>
+        </StackPanel>
+
+        <!-- Lista de contactos -->
+        <ListBox x:Name="ContactsListBox" Grid.Row="4" Margin="0,10,0,0" Height="200"/>
+    </Grid>
+</Window>

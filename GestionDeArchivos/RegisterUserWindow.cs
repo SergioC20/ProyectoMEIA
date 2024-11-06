@@ -7,19 +7,22 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace GestionDeArchivos
 {
     public partial class RegisterUserWindow : Window
     {
         private const string UsersFilePath = "users.txt";
-        private TextBox usernameBox;
-        private TextBox passwordBox;
-        private TextBox nameBox;
-        private TextBox surnameBox;
-        private DatePicker birthDatePicker;
-        private TextBox phoneBox;
-        private TextBlock messageBlock;
+        private const string DescUserFilePath = "Desc_user.txt";
+        private TextBox? usernameBox;
+        private TextBox? passwordBox;
+        private TextBox? nameBox;
+        private TextBox? surnameBox;
+        private DatePicker? birthDatePicker;
+        private TextBox? phoneBox;
+        private TextBlock? messageBlock;
 
         public RegisterUserWindow()
         {
@@ -48,16 +51,22 @@ namespace GestionDeArchivos
             if (cancelButton != null) cancelButton.Click += CancelButton_Click;
         }
 
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        private void RegisterButton_Click(object? sender, RoutedEventArgs e)
         {
             try
             {
-                string username = usernameBox.Text;
-                string password = passwordBox.Text;
-                string name = nameBox.Text;
-                string surname = surnameBox.Text;
+                if (messageBlock == null || usernameBox == null || passwordBox == null || 
+                    nameBox == null || surnameBox == null || birthDatePicker == null || phoneBox == null)
+                {
+                    return;
+                }
+
+                string username = usernameBox.Text ?? string.Empty;
+                string password = passwordBox.Text ?? string.Empty;
+                string name = nameBox.Text ?? string.Empty;
+                string surname = surnameBox.Text ?? string.Empty;
                 DateTime birthDate = birthDatePicker.SelectedDate?.DateTime ?? DateTime.Now;
-                string phone = phoneBox.Text;
+                string phone = phoneBox.Text ?? string.Empty;
 
                 StringBuilder errorMessage = new StringBuilder();
 
@@ -90,8 +99,15 @@ namespace GestionDeArchivos
                     return;
                 }
 
-                if (AddNewUser(username, name, surname, password, birthDate, int.Parse(phone)))
+                if (!int.TryParse(phone, out int phoneNumber))
                 {
+                    messageBlock.Text = "El número de teléfono debe ser un número válido.";
+                    return;
+                }
+
+                if (AddNewUser(username, name, surname, password, birthDate, phoneNumber))
+                {
+                    UpdateDescUserFile(name, username);
                     messageBlock.Text = "Usuario registrado exitosamente!";
                     ClearRegistrationFields();
                 }
@@ -102,40 +118,119 @@ namespace GestionDeArchivos
             }
             catch (Exception ex)
             {
-                messageBlock.Text = $"Error inesperado: {ex.Message}";
+                if (messageBlock != null)
+                    messageBlock.Text = $"Error inesperado: {ex.Message}";
             }
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        private void UpdateDescUserFile(string symbolicName, string creationUser)
+        {
+            try
+            {
+                // Solo actualizar si users.txt existe y no está vacío
+                if (!File.Exists(UsersFilePath))
+                {
+                    return;
+                }
+
+                var usersData = File.ReadAllLines(UsersFilePath);
+                if (usersData.Length == 0)
+                {
+                    return;
+                }
+
+                var currentDateTime = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+                
+                // Contar registros totales y activos/inactivos
+                int totalRecords = usersData.Length;
+                int activeRecords = usersData.Count(line => line.Split(';')[7].Trim() == "1");
+                int inactiveRecords = totalRecords - activeRecords;
+
+                string newDescRecord = $"{symbolicName};{currentDateTime};{creationUser};{currentDateTime};{creationUser};{totalRecords};{activeRecords};{inactiveRecords}";
+
+                // Si es el primer registro, crear el archivo con encabezado
+                if (totalRecords == 1)
+                {
+                    string header = "nombresimbolico;fechadecreacion;usuariocreacion;fechamodificacion;usuariomodificacion;no.registros;registrosactivos;registrosinactivos";
+                    File.WriteAllText(DescUserFilePath, header + Environment.NewLine + newDescRecord);
+                }
+                else if (File.Exists(DescUserFilePath))
+                {
+                    // Si ya existe, actualizar con la nueva información
+                    var descLines = File.ReadAllLines(DescUserFilePath).ToList();
+                    
+                    // Mantener el encabezado
+                    if (descLines.Count > 0)
+                    {
+                        // Actualizar todos los registros existentes con los nuevos conteos
+                        for (int i = 1; i < descLines.Count; i++)
+                        {
+                            var fields = descLines[i].Split(';');
+                            fields[5] = totalRecords.ToString();
+                            fields[6] = activeRecords.ToString();
+                            fields[7] = inactiveRecords.ToString();
+                            descLines[i] = string.Join(";", fields);
+                        }
+                        
+                        // Agregar el nuevo registro
+                        descLines.Add(newDescRecord);
+                        
+                        // Escribir todo de vuelta al archivo
+                        File.WriteAllLines(DescUserFilePath, descLines);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (messageBlock != null)
+                    messageBlock.Text = $"Error al actualizar el archivo de descripción: {ex.Message}";
+            }
+        }
+
+        private void CancelButton_Click(object? sender, RoutedEventArgs e)
         {
             Close();
         }
 
         private void ClearRegistrationFields()
         {
-            usernameBox.Text = string.Empty;
-            passwordBox.Text = string.Empty;
-            nameBox.Text = string.Empty;
-            surnameBox.Text = string.Empty;
-            birthDatePicker.SelectedDate = null;
-            phoneBox.Text = string.Empty;
+            if (usernameBox != null) usernameBox.Text = string.Empty;
+            if (passwordBox != null) passwordBox.Text = string.Empty;
+            if (nameBox != null) nameBox.Text = string.Empty;
+            if (surnameBox != null) surnameBox.Text = string.Empty;
+            if (birthDatePicker != null) birthDatePicker.SelectedDate = null;
+            if (phoneBox != null) phoneBox.Text = string.Empty;
         }
 
         private bool AddNewUser(string user, string name, string surname, string password, DateTime birthDate, int phone)
         {
-            if (IsUserExists(user)) return false;
+            try
+            {
+                if (IsUserExists(user)) return false;
 
-            string hashedPassword = GetMD5Hash(password);
-            string formattedDate = birthDate.ToString("dd/MM/yyyy");
+                string hashedPassword = GetMD5Hash(password);
+                string formattedDate = birthDate.ToString("dd/MM/yyyy");
 
-            bool isFirstUser = !File.Exists(UsersFilePath) || new FileInfo(UsersFilePath).Length == 0;
-            int role = 0; // Siempre 0 para nuevos usuarios registrados por el administrador
-            int status = 1;
+                bool isFirstUser = !File.Exists(UsersFilePath) || new FileInfo(UsersFilePath).Length == 0;
+                int role = 0; // Siempre 0 para nuevos usuarios registrados por el administrador
+                int status = 1;
 
-            string newRecord = $"{user.PadRight(20)};{name.PadRight(30)};{surname.PadRight(30)};{hashedPassword.PadRight(32)};{role};{formattedDate};{phone.ToString().PadRight(4)};{status}\n";
+                string newRecord = $"{user.PadRight(20)};{name.PadRight(30)};{surname.PadRight(30)};{hashedPassword.PadRight(32)};{role};{formattedDate};{phone.ToString().PadRight(4)};{status}\n";
 
-            File.AppendAllText(UsersFilePath, newRecord);
-            return true;
+                if (!File.Exists(UsersFilePath))
+                {
+                    File.WriteAllText(UsersFilePath, string.Empty);
+                }
+
+                File.AppendAllText(UsersFilePath, newRecord);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (messageBlock != null)
+                    messageBlock.Text = $"Error al agregar nuevo usuario: {ex.Message}";
+                return false;
+            }
         }
 
         private bool IsUserExists(string username)
